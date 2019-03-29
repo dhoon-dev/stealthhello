@@ -218,7 +218,7 @@ static struct nf_hook_ops sh = {
 	.hook = sh_hook,
 	.pf = NFPROTO_IPV4,
 	.hooknum = NF_INET_POST_ROUTING,
-	.priority = NF_IP_PRI_MANGLE
+	.priority = NF_IP_PRI_LAST
 };
 
 int init_module(void)
