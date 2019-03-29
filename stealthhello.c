@@ -173,11 +173,15 @@ static unsigned int sh_hook(void *priv, struct sk_buff *skb, const struct nf_hoo
 	int iph_l, tot_l, tcph_l, hdr_l, tls_msgs_l;
 
 	iph = ip_hdr(skb);
-	iph_l = iph->ihl << 2;
-	tot_l = ntohs(iph->tot_len);
+
+	if (iph->frag_off & htons(IP_OFFSET | IP_MF))
+		return NF_ACCEPT;
 
 	if (iph->protocol != IPPROTO_TCP)
 		return NF_ACCEPT;
+	
+	iph_l = iph->ihl << 2;
+	tot_l = ntohs(iph->tot_len);
 
 	tcph = tcp_hdr(skb);
 	tcph_l = tcph->doff << 2;
